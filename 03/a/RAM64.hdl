@@ -1,0 +1,36 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/RAM64.hdl
+
+/**
+ * Memory of 64 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+
+CHIP RAM64 {
+    IN in[16], load, address[6];
+    OUT out[16];
+
+    PARTS:
+    // the three most left bits will determine which of the ram to select
+    DMux8Way (in=load, sel=address[3..5], a=r1load, b=r2load, c=r3load,
+    d=r4load, e=r5load, f=r6load, g=r7load, h=r8load);
+
+    RAM8 (in=in, load=r1load, address=address[0..2], out=r1);
+    RAM8 (in=in, load=r2load, address=address[0..2], out=r2);
+    RAM8 (in=in, load=r3load, address=address[0..2], out=r3);
+    RAM8 (in=in, load=r4load, address=address[0..2], out=r4);
+    RAM8 (in=in, load=r5load, address=address[0..2], out=r5);
+    RAM8 (in=in, load=r6load, address=address[0..2], out=r6);
+    RAM8 (in=in, load=r7load, address=address[0..2], out=r7);
+    RAM8 (in=in, load=r8load, address=address[0..2], out=r8);
+
+    // choose which r[i] to be the output due to address[3..5] (left bits)
+    Mux8Way16(a=r1, b=r2, c=r3, d=r4, e=r5, f=r6, g=r7, h=r8,
+    sel=address[3..5] ,out=out);
+
+
+}
