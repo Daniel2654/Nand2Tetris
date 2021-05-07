@@ -1,0 +1,91 @@
+class Bird
+{
+    field int x,y;
+    constructor Bird new()
+    {
+        let y = 2664;
+        let x = 8;
+        do draw();
+        return this;
+
+    }
+
+    // dispose the bird
+    method void dispose()
+    {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+
+    // draw a bird
+    method void draw()
+    {
+        var int memAddress;
+        let memAddress = 16384 + y;
+        do Memory.poke(memAddress + 0, 0);
+        do Memory.poke(memAddress + 32, 0);
+        do Memory.poke(memAddress + 64, 1920);
+        do Memory.poke(memAddress + 96, 2656);
+        do Memory.poke(memAddress + 128, 4368);
+        do Memory.poke(memAddress + 160, 10526);
+        do Memory.poke(memAddress + 192, 10529);
+        do Memory.poke(memAddress + 224, 8769);
+        do Memory.poke(memAddress + 256, 32321);
+        do Memory.poke(memAddress + 288, -32478);
+        do Memory.poke(memAddress + 320, 32412);
+        do Memory.poke(memAddress + 352, 16644);
+        do Memory.poke(memAddress + 384, 32280);
+        do Memory.poke(memAddress + 416, 992);
+        do Memory.poke(memAddress + 448, 0);
+        do Memory.poke(memAddress + 480, 0);
+        return;
+    }
+
+    // move the bird
+    method void move()
+    {
+        do Screen.setColor(false);
+        do draw();
+        do Screen.setColor(true);
+        do draw();
+        return;
+    }
+    // move the bird up
+    method void moveUp()
+    {
+        if (y > 64)
+        {
+            let y = y - 64;
+            do move();
+         }
+        return;
+    }
+
+    // move the bird down return false if the bird crashed with the floor
+    method boolean moveDown()
+    {
+        if (y < 7550)
+        {
+            let y = y + 64;
+            do move();
+            return true;
+        }
+        else { return false; }
+    }
+
+    // get the y coordinate of the bird
+    method int getY()
+    {
+        var int yCoordinate;
+        let yCoordinate = Math.divide(y, 32);
+        return yCoordinate;
+    }
+
+    // get the x coordinate of the bird
+    method int getX()
+    {
+        return x;
+    }
+}
+

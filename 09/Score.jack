@@ -1,0 +1,79 @@
+class Score
+{
+    field int curScore, lvl;
+    field string gameOver, scoreStr, lvlStr;
+    constructor Score new()
+    {
+        let curScore = 0;
+        let lvl = 1;
+        let gameOver = "Game Over";
+        let scoreStr = "Score:";
+        let lvlStr = "Level:";
+
+        return this;
+
+    }
+
+    // dispose the object
+    method void dispose()
+    {
+        do Memory.deAlloc(this);
+        return;
+    }
+    method void isNextLvl()
+    {
+        if (((Math.multiply(lvl, 15)) - curScore) = 0)
+        {
+            let lvl = lvl + 1;
+        }
+        return;
+    }
+
+    // prints the current score
+    method void printScore()
+    {
+        do Output.moveCursor(0, 0);
+        do Output.printString(scoreStr);
+        do Output.moveCursor(0, 7);
+        do Output.printInt(curScore);
+
+        do Output.moveCursor(1, 0);
+        do Output.printString(lvlStr);
+        do Output.moveCursor(1, 7);
+        do Output.printInt(lvl);
+        let curScore = curScore + 1;
+
+        do isNextLvl();
+
+        return;
+    }
+
+    // print game over message
+    method void gameOver()
+    {
+        do Screen.clearScreen();
+        do Output.moveCursor(12, 26);
+        do Output.printString(gameOver);
+        return;
+    }
+
+    // return the speed of the level.
+    // notes: this method is optinal and i didn't add it in the version i submitted seems it act diffrent is diffrent
+    // computers
+    method int getSpeedLvl()
+    {
+        var int speed;
+        let speed = 6 - lvl;
+        if (speed > 0)
+        {
+            return speed;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+
+}
+

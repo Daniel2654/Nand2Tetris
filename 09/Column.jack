@@ -1,0 +1,190 @@
+class Column
+{
+    field int x1, x2, y1, y2, len1, len2, curArrIndex;
+    field Arr colsData;
+
+    constructor Column new()
+    {
+        let curArrIndex = 0;
+        let colsData = Array.new(10);
+        do setColsData();
+        do initializeCoordinates();
+
+        do moveCol();
+        return this;
+
+    }
+
+    // set the column at the right location of the screen
+    method void initializeCoordinates()
+    {
+        let y1 = 16384 + 31;
+        let y2 = 24576;
+        let x1 = 0;
+        let x2 = 0;
+        let len1 = colsData[curArrIndex];
+        let len2 = colsData[curArrIndex + 1];
+        return;
+
+    }
+
+    // dispose the column
+    method void dispose()
+    {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    // determine the length of the col
+    method void setColsData()
+    {
+        let colsData[0] = 100;
+        let colsData[1] = 50;
+        let colsData[2] = 40;
+        let colsData[3] = 140;
+        let colsData[4] = 20;
+        let colsData[5] = 90;
+        let colsData[6] = 80;
+        let colsData[7] = 80;
+        let colsData[8] = 40;
+        let colsData[9] = 30;
+        return;
+    }
+
+    // return the upper len
+    method int getUpperLen()
+    {
+        return len1;
+    }
+
+    // return the lower len
+    method int getLowerLen()
+    {
+        return 240 - len2;
+    }
+
+    // draws the upper column
+    method void drawUpperColumn()
+    {
+	var int memAddress;
+	var int i;
+	let memAddress = y1 + x1;
+	let i = 0;
+	while (i < len1)
+	{
+	   	do Memory.poke(memAddress, 4104);
+	   	let memAddress = memAddress + 32;
+	   	let i = i + 1;
+	}
+	do Memory.poke(memAddress + 0, 4104);
+	do Memory.poke(memAddress + 32, 32766);
+	do Memory.poke(memAddress + 64, 16386);
+	do Memory.poke(memAddress + 96, 16386);
+	do Memory.poke(memAddress + 128, 32766);
+	return;
+    }
+
+    // draw the bottom column
+    method void drawBottomColumn()
+    {
+        var int memAddress;
+        var int i;
+        let memAddress = y2 + x2;
+        let i = 0;
+        while (i < len2)
+        {
+            do Memory.poke(memAddress, 4104);
+        	let memAddress = memAddress - 32;
+        	let i = i + 1;
+        }
+    do Memory.poke(memAddress, 4104);
+	do Memory.poke(memAddress - 32, 32766);
+	do Memory.poke(memAddress - 64, 16386);
+	do Memory.poke(memAddress - 96, 16386);
+	do Memory.poke(memAddress - 128, 32766);
+
+
+        return;
+    }
+
+    // erase the upper col
+    method void eraseUpperColumn()
+    {
+	var int memAddress;
+	var int i;
+	let memAddress = y1 + x1;
+	let i = 0;
+	while (i < len1)
+	{
+	   	do Memory.poke(memAddress, 0);
+	   	let memAddress = memAddress + 32;
+	   	let i = i + 1;
+	}
+	do Memory.poke(memAddress + 0, 0);
+	do Memory.poke(memAddress + 32, 0);
+	do Memory.poke(memAddress + 64, 0);
+	do Memory.poke(memAddress + 96, 0);
+	do Memory.poke(memAddress + 128, 0);
+	return;
+    }
+
+    // erase the bottom col
+    method void eraseBottomColumn()
+    {
+        var int memAddress;
+        var int i;
+        let memAddress = y2 + x2;
+        let i = 0;
+        while (i < len2)
+        {
+            do Memory.poke(memAddress, 0);
+        	let memAddress = memAddress - 32;
+        	let i = i + 1;
+        }
+    do Memory.poke(memAddress, 0);
+	do Memory.poke(memAddress - 32, 0);
+	do Memory.poke(memAddress - 64, 0);
+	do Memory.poke(memAddress - 96, 0);
+	do Memory.poke(memAddress - 128, 0);
+
+
+        return;
+    }
+
+    // move the cols, return true when cols arrived at the left of the screen, othwrwise false.
+    method boolean moveCol()
+    {
+        if (x1 > - 32)
+        {
+            do eraseUpperColumn();
+            do eraseBottomColumn();
+            let x1 = x1 - 1;
+            let x2 = x1 - 1;
+            do drawUpperColumn();
+            do drawBottomColumn();
+            return false;
+        }
+
+        else
+        {
+            do eraseUpperColumn();
+            do eraseBottomColumn();
+            let curArrIndex = curArrIndex + 2;
+            if (curArrIndex = 8)
+            {
+                let curArrIndex = 0;
+            }
+            do initializeCoordinates();
+            return true;
+
+        }
+
+    }
+
+    method int getX()
+    {
+        return x1;
+    }
+
+}
+

@@ -1,0 +1,12 @@
+class Main
+{
+    function void main()
+    {
+    var FlappyBirdGame game;
+    let game = FlappyBirdGame.new();
+    do game.run();
+    do game.dispose();
+    return;
+    }
+}
+
